@@ -1,2 +1,2 @@
-email_address ='ppython130@gmail.com'
-password='qwyapnqlbipxqcwd'
+email_address =''
+password=''
