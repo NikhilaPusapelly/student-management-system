@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>test_addtask.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+.s5 { color: #7a7e85;}
+.ln { color: #4b5059; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+test_addtask.py</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0">import </span><span class="s1">os</span>
+<a name="l2"><span class="ln">2    </span></a><span class="s0">import </span><span class="s1">sys</span>
+<a name="l3"><span class="ln">3    </span></a><span class="s0">import </span><span class="s1">time</span>
+<a name="l4"><span class="ln">4    </span></a>
+<a name="l5"><span class="ln">5    </span></a><span class="s0">import </span><span class="s1">pythoncom</span>
+<a name="l6"><span class="ln">6    </span></a><span class="s0">import </span><span class="s1">win32api</span>
+<a name="l7"><span class="ln">7    </span></a><span class="s0">from </span><span class="s1">win32com</span><span class="s2">.</span><span class="s1">taskscheduler </span><span class="s0">import </span><span class="s1">taskscheduler</span>
+<a name="l8"><span class="ln">8    </span></a>
+<a name="l9"><span class="ln">9    </span></a><span class="s1">task_name </span><span class="s2">= </span><span class="s3">&quot;test_addtask.job&quot;</span>
+<a name="l10"><span class="ln">10   </span></a><span class="s1">ts </span><span class="s2">= </span><span class="s1">pythoncom</span><span class="s2">.</span><span class="s1">CoCreateInstance</span><span class="s2">(</span>
+<a name="l11"><span class="ln">11   </span></a>    <span class="s1">taskscheduler</span><span class="s2">.</span><span class="s1">CLSID_CTaskScheduler</span><span class="s2">,</span>
+<a name="l12"><span class="ln">12   </span></a>    <span class="s0">None</span><span class="s2">,</span>
+<a name="l13"><span class="ln">13   </span></a>    <span class="s1">pythoncom</span><span class="s2">.</span><span class="s1">CLSCTX_INPROC_SERVER</span><span class="s2">,</span>
+<a name="l14"><span class="ln">14   </span></a>    <span class="s1">taskscheduler</span><span class="s2">.</span><span class="s1">IID_ITaskScheduler</span><span class="s2">,</span>
+<a name="l15"><span class="ln">15   </span></a><span class="s2">)</span>
+<a name="l16"><span class="ln">16   </span></a><span class="s1">tasks </span><span class="s2">= </span><span class="s1">ts</span><span class="s2">.</span><span class="s1">Enum</span><span class="s2">()</span>
+<a name="l17"><span class="ln">17   </span></a><span class="s0">for </span><span class="s1">task </span><span class="s0">in </span><span class="s1">tasks</span><span class="s2">:</span>
+<a name="l18"><span class="ln">18   </span></a>    <span class="s1">print</span><span class="s2">(</span><span class="s1">task</span><span class="s2">)</span>
+<a name="l19"><span class="ln">19   </span></a><span class="s0">if </span><span class="s1">task_name </span><span class="s0">in </span><span class="s1">tasks</span><span class="s2">:</span>
+<a name="l20"><span class="ln">20   </span></a>    <span class="s1">print</span><span class="s2">(</span><span class="s3">&quot;Deleting existing task &quot; </span><span class="s2">+ </span><span class="s1">task_name</span><span class="s2">)</span>
+<a name="l21"><span class="ln">21   </span></a>    <span class="s1">ts</span><span class="s2">.</span><span class="s1">Delete</span><span class="s2">(</span><span class="s1">task_name</span><span class="s2">)</span>
+<a name="l22"><span class="ln">22   </span></a>
+<a name="l23"><span class="ln">23   </span></a><span class="s1">t </span><span class="s2">= </span><span class="s1">ts</span><span class="s2">.</span><span class="s1">NewWorkItem</span><span class="s2">(</span><span class="s1">task_name</span><span class="s2">)</span>
+<a name="l24"><span class="ln">24   </span></a><span class="s1">t</span><span class="s2">.</span><span class="s1">SetComment</span><span class="s2">(</span><span class="s3">&quot;rude comments&quot;</span><span class="s2">)</span>
+<a name="l25"><span class="ln">25   </span></a><span class="s1">t</span><span class="s2">.</span><span class="s1">SetApplicationName</span><span class="s2">(</span><span class="s1">sys</span><span class="s2">.</span><span class="s1">executable</span><span class="s2">)</span>
+<a name="l26"><span class="ln">26   </span></a><span class="s1">t</span><span class="s2">.</span><span class="s1">SetPriority</span><span class="s2">(</span><span class="s1">taskscheduler</span><span class="s2">.</span><span class="s1">REALTIME_PRIORITY_CLASS</span><span class="s2">)</span>
+<a name="l27"><span class="ln">27   </span></a><span class="s1">t</span><span class="s2">.</span><span class="s1">SetParameters</span><span class="s2">(</span>
+<a name="l28"><span class="ln">28   </span></a>    <span class="s3">&quot;-c</span><span class="s0">\&quot;</span><span class="s3">import win32ui,time;win32ui.MessageBox('hey bubba I am running');</span><span class="s0">\&quot;</span><span class="s3">&quot;</span>
+<a name="l29"><span class="ln">29   </span></a><span class="s2">)</span>
+<a name="l30"><span class="ln">30   </span></a><span class="s1">t</span><span class="s2">.</span><span class="s1">SetWorkingDirectory</span><span class="s2">(</span><span class="s1">os</span><span class="s2">.</span><span class="s1">path</span><span class="s2">.</span><span class="s1">dirname</span><span class="s2">(</span><span class="s1">sys</span><span class="s2">.</span><span class="s1">executable</span><span class="s2">))</span>
+<a name="l31"><span class="ln">31   </span></a><span class="s1">t</span><span class="s2">.</span><span class="s1">SetCreator</span><span class="s2">(</span><span class="s3">&quot;test_addtask.py&quot;</span><span class="s2">)</span>
+<a name="l32"><span class="ln">32   </span></a><span class="s1">t</span><span class="s2">.</span><span class="s1">SetMaxRunTime</span><span class="s2">(</span><span class="s4">20000</span><span class="s2">)  </span><span class="s5"># milliseconds</span>
+<a name="l33"><span class="ln">33   </span></a><span class="s1">t</span><span class="s2">.</span><span class="s1">SetFlags</span><span class="s2">(</span>
+<a name="l34"><span class="ln">34   </span></a>    <span class="s1">taskscheduler</span><span class="s2">.</span><span class="s1">TASK_FLAG_INTERACTIVE </span><span class="s2">| </span><span class="s1">taskscheduler</span><span class="s2">.</span><span class="s1">TASK_FLAG_RUN_ONLY_IF_LOGGED_ON</span>
+<a name="l35"><span class="ln">35   </span></a><span class="s2">)</span>
+<a name="l36"><span class="ln">36   </span></a><span class="s5">##               |taskscheduler.TASK_FLAG_DELETE_WHEN_DONE)  #task self destructs when no more future run times</span>
+<a name="l37"><span class="ln">37   </span></a><span class="s1">t</span><span class="s2">.</span><span class="s1">SetAccountInformation</span><span class="s2">(</span><span class="s1">win32api</span><span class="s2">.</span><span class="s1">GetUserName</span><span class="s2">(), </span><span class="s0">None</span><span class="s2">)</span>
+<a name="l38"><span class="ln">38   </span></a><span class="s5">## None is only valid for local system acct or if task flags contain TASK_FLAG_RUN_ONLY_IF_LOGGED_ON</span>
+<a name="l39"><span class="ln">39   </span></a><span class="s1">t</span><span class="s2">.</span><span class="s1">SetWorkItemData</span><span class="s2">(</span><span class="s3">&quot;some binary garbage&quot;</span><span class="s2">)</span>
+<a name="l40"><span class="ln">40   </span></a>
+<a name="l41"><span class="ln">41   </span></a><span class="s1">run_time </span><span class="s2">= </span><span class="s1">time</span><span class="s2">.</span><span class="s1">localtime</span><span class="s2">(</span><span class="s1">time</span><span class="s2">.</span><span class="s1">time</span><span class="s2">() + </span><span class="s4">60</span><span class="s2">)</span>
+<a name="l42"><span class="ln">42   </span></a><span class="s1">tr_ind</span><span class="s2">, </span><span class="s1">tr </span><span class="s2">= </span><span class="s1">t</span><span class="s2">.</span><span class="s1">CreateTrigger</span><span class="s2">()</span>
+<a name="l43"><span class="ln">43   </span></a><span class="s1">tt </span><span class="s2">= </span><span class="s1">tr</span><span class="s2">.</span><span class="s1">GetTrigger</span><span class="s2">()</span>
+<a name="l44"><span class="ln">44   </span></a>
+<a name="l45"><span class="ln">45   </span></a><span class="s5">## flags default to TASK_TRIGGER_FLAG_DISABLED (4)</span>
+<a name="l46"><span class="ln">46   </span></a><span class="s1">tt</span><span class="s2">.</span><span class="s1">Flags </span><span class="s2">= </span><span class="s1">taskscheduler</span><span class="s2">.</span><span class="s1">TASK_TRIGGER_FLAG_KILL_AT_DURATION_END</span>
+<a name="l47"><span class="ln">47   </span></a><span class="s1">tt</span><span class="s2">.</span><span class="s1">BeginYear </span><span class="s2">= </span><span class="s1">int</span><span class="s2">(</span><span class="s1">time</span><span class="s2">.</span><span class="s1">strftime</span><span class="s2">(</span><span class="s3">&quot;%Y&quot;</span><span class="s2">, </span><span class="s1">run_time</span><span class="s2">))</span>
+<a name="l48"><span class="ln">48   </span></a><span class="s1">tt</span><span class="s2">.</span><span class="s1">BeginMonth </span><span class="s2">= </span><span class="s1">int</span><span class="s2">(</span><span class="s1">time</span><span class="s2">.</span><span class="s1">strftime</span><span class="s2">(</span><span class="s3">&quot;%m&quot;</span><span class="s2">, </span><span class="s1">run_time</span><span class="s2">))</span>
+<a name="l49"><span class="ln">49   </span></a><span class="s1">tt</span><span class="s2">.</span><span class="s1">BeginDay </span><span class="s2">= </span><span class="s1">int</span><span class="s2">(</span><span class="s1">time</span><span class="s2">.</span><span class="s1">strftime</span><span class="s2">(</span><span class="s3">&quot;%d&quot;</span><span class="s2">, </span><span class="s1">run_time</span><span class="s2">))</span>
+<a name="l50"><span class="ln">50   </span></a><span class="s1">tt</span><span class="s2">.</span><span class="s1">StartMinute </span><span class="s2">= </span><span class="s1">int</span><span class="s2">(</span><span class="s1">time</span><span class="s2">.</span><span class="s1">strftime</span><span class="s2">(</span><span class="s3">&quot;%M&quot;</span><span class="s2">, </span><span class="s1">run_time</span><span class="s2">))</span>
+<a name="l51"><span class="ln">51   </span></a><span class="s1">tt</span><span class="s2">.</span><span class="s1">StartHour </span><span class="s2">= </span><span class="s1">int</span><span class="s2">(</span><span class="s1">time</span><span class="s2">.</span><span class="s1">strftime</span><span class="s2">(</span><span class="s3">&quot;%H&quot;</span><span class="s2">, </span><span class="s1">run_time</span><span class="s2">))</span>
+<a name="l52"><span class="ln">52   </span></a><span class="s1">tt</span><span class="s2">.</span><span class="s1">MinutesInterval </span><span class="s2">= </span><span class="s4">1</span>
+<a name="l53"><span class="ln">53   </span></a><span class="s1">tt</span><span class="s2">.</span><span class="s1">MinutesDuration </span><span class="s2">= </span><span class="s4">5</span>
+<a name="l54"><span class="ln">54   </span></a>
+<a name="l55"><span class="ln">55   </span></a><span class="s1">tt</span><span class="s2">.</span><span class="s1">TriggerType </span><span class="s2">= </span><span class="s1">taskscheduler</span><span class="s2">.</span><span class="s1">TASK_TIME_TRIGGER_MONTHLYDATE</span>
+<a name="l56"><span class="ln">56   </span></a><span class="s5"># months can contain multiples in a bitmask, use 1&lt;&lt;(month_nbr-1)</span>
+<a name="l57"><span class="ln">57   </span></a><span class="s1">tt</span><span class="s2">.</span><span class="s1">MonthlyDate_Months </span><span class="s2">= </span><span class="s4">1 </span><span class="s2">&lt;&lt; (</span>
+<a name="l58"><span class="ln">58   </span></a>    <span class="s1">int</span><span class="s2">(</span><span class="s1">time</span><span class="s2">.</span><span class="s1">strftime</span><span class="s2">(</span><span class="s3">&quot;%m&quot;</span><span class="s2">, </span><span class="s1">run_time</span><span class="s2">)) - </span><span class="s4">1</span>
+<a name="l59"><span class="ln">59   </span></a><span class="s2">)  </span><span class="s5">## corresponds to TASK_JANUARY..TASK_DECEMBER constants</span>
+<a name="l60"><span class="ln">60   </span></a><span class="s5"># days too</span>
+<a name="l61"><span class="ln">61   </span></a><span class="s1">tt</span><span class="s2">.</span><span class="s1">MonthlyDate_Days </span><span class="s2">= </span><span class="s4">1 </span><span class="s2">&lt;&lt; (</span><span class="s1">int</span><span class="s2">(</span><span class="s1">time</span><span class="s2">.</span><span class="s1">strftime</span><span class="s2">(</span><span class="s3">&quot;%d&quot;</span><span class="s2">, </span><span class="s1">run_time</span><span class="s2">)) - </span><span class="s4">1</span><span class="s2">)</span>
+<a name="l62"><span class="ln">62   </span></a><span class="s1">tr</span><span class="s2">.</span><span class="s1">SetTrigger</span><span class="s2">(</span><span class="s1">tt</span><span class="s2">)</span>
+<a name="l63"><span class="ln">63   </span></a><span class="s1">print</span><span class="s2">(</span><span class="s1">t</span><span class="s2">.</span><span class="s1">GetTriggerString</span><span class="s2">(</span><span class="s1">tr_ind</span><span class="s2">))</span>
+<a name="l64"><span class="ln">64   </span></a>
+<a name="l65"><span class="ln">65   </span></a><span class="s1">pf </span><span class="s2">= </span><span class="s1">t</span><span class="s2">.</span><span class="s1">QueryInterface</span><span class="s2">(</span><span class="s1">pythoncom</span><span class="s2">.</span><span class="s1">IID_IPersistFile</span><span class="s2">)</span>
+<a name="l66"><span class="ln">66   </span></a><span class="s1">pf</span><span class="s2">.</span><span class="s1">Save</span><span class="s2">(</span><span class="s0">None</span><span class="s2">, </span><span class="s4">1</span><span class="s2">)</span>
+<a name="l67"><span class="ln">67   </span></a></pre>
+</body>
+</html>
